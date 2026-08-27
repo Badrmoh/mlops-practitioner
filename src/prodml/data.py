@@ -29,4 +29,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df["Trip_Start_dt"] = pd.to_datetime(df["Trip_Start"])
     df["Trip_End_dt"] = pd.to_datetime(df["Trip_End"])
     df["Trip_Duration"] = (df["Trip_Duration"] / 60).astype("float")
-    return df[(df["Trip_Duration"] >= 1) & (df["Trip_Duration"] <= 60)]
+    df = df[(df["Trip_Duration"] >= 1) & (df["Trip_Duration"] <= 60)]
+    df = df[df["Trip_Distance"] <= 100]
+    df = df[df["Passengers"] > 0]
+    return df

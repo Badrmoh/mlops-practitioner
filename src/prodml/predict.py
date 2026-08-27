@@ -18,7 +18,7 @@ def timed(fn):
         start = time.monotonic()  # NOT time.time — immune to clock jumps
         result = fn(*args, **kwargs)
         duration = time.monotonic() - start
-        _log.info(f"{fn.__name__} took {duration*1000:.1f} ms")
+        _log.info(f"Prediction served with latency {duration*1000:.1f} ms")
         return result
 
     return wrapper
@@ -34,10 +34,17 @@ class DurationPredictor:
         """Load a trained model and vectorizer from disk."""
         import pickle
 
-        with open(self.settings.model_path, "rb") as f_in:
-            model_data = pickle.load(f_in)
-            self._model = model_data["model"]
-            self._vec = model_data["vectorizer"]
+        try:
+            with open(self.settings.model_path, "rb") as f_in:
+                model_data = pickle.load(f_in)
+                self._model = model_data["model"]
+                self._vec = model_data["vectorizer"]
+        except FileNotFoundError:
+            _log.error(f"Model file not found at {self.settings.model_path}")
+            raise
+        except Exception as e:
+            _log.error(f"Error loading model: {e}")
+            raise
 
     @timed
     def predict(self, features: dict) -> float:
@@ -50,6 +57,7 @@ class DurationPredictor:
         Returns:
             float: The predicted duration of the trip in minutes.
         """
+        _log.debug("predict.features", features=features)
         X = self._vec.transform([features])
         prediction = self._model.predict(X)
         return prediction[0]
