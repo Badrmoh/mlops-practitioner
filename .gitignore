@@ -9,3 +9,6 @@ data/
 
 # Virtual environments
 .venv
+
+# Ignore user configs
+.env 
