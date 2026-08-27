@@ -17,6 +17,13 @@ build-backend = "setuptools.build_meta"
 
 [dependency-groups]
 dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "black",
+    "mypy",
+    "httpx",
+    "pre-commit",
     "matplotlib>=3.10.9",
     "seaborn>=0.13.2",
 ]
