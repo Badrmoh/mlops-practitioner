@@ -1,10 +1,13 @@
+from collections.abc import Callable
+from typing import Any, Protocol
+
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import root_mean_squared_error, mean_absolute_error
-from typing import Protocol, Any, Callable
+from sklearn.metrics import mean_absolute_error, root_mean_squared_error
 
 
 class Fittable(Protocol):
     """Anything with a .fit(X, y) method — sklearn models satisfy it structurally."""
+
     def fit(self, X: Any, y: Any) -> Any: ...
 
 
@@ -14,5 +17,5 @@ MODEL_FACTORIES: dict[str, Callable[..., Fittable]] = {
 
 METRICS: dict[str, Callable[[Any, Any], float]] = {
     "rmse": root_mean_squared_error,
-    "mae":  mean_absolute_error,
+    "mae": mean_absolute_error,
 }

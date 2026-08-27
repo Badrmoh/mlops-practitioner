@@ -1,36 +1,39 @@
-import logging
-from prodml.logging_config import setup_logger
 import functools
+import logging
 import time
+
 from prodml.config import PredictSettings
+from prodml.logging_config import setup_logger
 
 settings = PredictSettings()
 setup_logger(log_level=settings.log_level, log_format=settings.log_format)
 _log = logging.getLogger(__name__)
 
+
 def timed(fn):
     """Log the execution time of the decorated function."""
+
     @functools.wraps(fn)
     def wrapper(*args, **kwargs):
-        start = time.monotonic()          # NOT time.time — immune to clock jumps
+        start = time.monotonic()  # NOT time.time — immune to clock jumps
         result = fn(*args, **kwargs)
         duration = time.monotonic() - start
-        _log.info(
-            f"{fn.__name__} took {duration*1000:.1f} ms"
-        )
+        _log.info(f"{fn.__name__} took {duration*1000:.1f} ms")
         return result
+
     return wrapper
 
 
 class DurationPredictor:
     """A class for predicting the duration of a trip based on input features."""
-    
+
     def __init__(self, settings: PredictSettings):
         self.settings = settings
 
     def load(self) -> None:
         """Load a trained model and vectorizer from disk."""
         import pickle
+
         with open(self.settings.model_path, "rb") as f_in:
             model_data = pickle.load(f_in)
             self._model = model_data["model"]
@@ -40,10 +43,10 @@ class DurationPredictor:
     def predict(self, features: dict) -> float:
         """
         Predict the duration of a trip given its features.
-        
+
         Args:
             features (dict): A dictionary containing the features of the trip.
-        
+
         Returns:
             float: The predicted duration of the trip in minutes.
         """
@@ -55,10 +58,10 @@ class DurationPredictor:
     def predict_batch(self, features_list: list[dict]) -> list[float]:
         """
         Predict the duration of multiple trips given their features.
-        
+
         Args:
             features_list (list[dict]): A list of dictionaries, each containing the features of a trip.
-        
+
         Returns:
             list[float]: A list of predicted durations for each trip in minutes.
         """
@@ -73,12 +76,12 @@ def main() -> None:
     predictor.load()
 
     # Example features for prediction
-    example_features =[
-        {'PU_DO': '260_193', 'Trip_Distance': 2.740000009536743},
-        {'PU_DO': '260_226', 'Trip_Distance': 1.4299999475479126},
-        {'PU_DO': '181_249', 'Trip_Distance': 3.700000047683716},
-        {'PU_DO': '260_260', 'Trip_Distance': 0.4000000059604645},
-        {'PU_DO': '74_244', 'Trip_Distance': 2.740000009536743}
+    example_features = [
+        {"PU_DO": "260_193", "Trip_Distance": 2.740000009536743},
+        {"PU_DO": "260_226", "Trip_Distance": 1.4299999475479126},
+        {"PU_DO": "181_249", "Trip_Distance": 3.700000047683716},
+        {"PU_DO": "260_260", "Trip_Distance": 0.4000000059604645},
+        {"PU_DO": "74_244", "Trip_Distance": 2.740000009536743},
     ]
 
     # Make a prediction

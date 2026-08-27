@@ -1,19 +1,23 @@
-import json
 import datetime as dt
-from typing import override
+import json
 import logging
+from typing import override
 
 
 class DefaultFormatter(logging.Formatter):
     """A custom logging formatter that outputs logs in JSON format."""
-    def __init__(self, fmt="%(levelname)s:\t%(asctime)s - %(module)s - %(message)s",
-                 datefmt="%H:%M:%S%z"):
+
+    def __init__(
+        self,
+        fmt="%(levelname)s:\t%(asctime)s - %(module)s - %(message)s",
+        datefmt="%H:%M:%S%z",
+    ):
         super().__init__(fmt=fmt, datefmt=datefmt)
 
     def format_time(self, record, datefmt=None):
         created = dt.datetime.fromtimestamp(record.created, tz=dt.timezone.utc)
         return created.strftime(datefmt) if datefmt else created.isoformat()
-  
+
     @override
     def format(self, record: logging.LogRecord) -> str:
         record.levelname = f"[{record.levelname}]"
@@ -22,7 +26,7 @@ class DefaultFormatter(logging.Formatter):
 
 class JSONFormatter(DefaultFormatter):
     """A custom logging formatter that outputs logs in JSON format."""
-    
+
     @override
     def format(self, record: logging.LogRecord) -> str:
         log_record = {
@@ -72,7 +76,7 @@ class JSONFormatter(DefaultFormatter):
 
 FORMATTERS: dict[str, type[logging.Formatter]] = {
     "json": JSONFormatter,
-    "default": DefaultFormatter
+    "default": DefaultFormatter,
 }
 
 LOG_LEVELS: dict[str, int] = {
@@ -80,11 +84,11 @@ LOG_LEVELS: dict[str, int] = {
     "info": logging.INFO,
     "error": logging.ERROR,
     "warning": logging.WARNING,
-    "critical": logging.CRITICAL
+    "critical": logging.CRITICAL,
 }
 
-def setup_logger(log_level: str = "info",
-                log_format: str = "default") -> None:
+
+def setup_logger(log_level: str = "info", log_format: str = "default") -> None:
     """
     Set up the root logger with the specified log level and format.
 

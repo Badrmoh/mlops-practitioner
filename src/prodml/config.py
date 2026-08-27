@@ -1,10 +1,10 @@
-import os
-
 from pathlib import Path
 from typing import Any
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
 
 class TrainingSettings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -20,6 +20,7 @@ class TrainingSettings(BaseSettings):
     log_level: str = "info"
     log_format: str = "default"
 
+
 class PredictSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="PRODML_PREDICT_",
@@ -29,4 +30,3 @@ class PredictSettings(BaseSettings):
     model_path: str = "models/model.pkl"
     log_level: str = "info"
     log_format: str = "default"
-    
