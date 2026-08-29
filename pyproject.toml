@@ -1,18 +1,14 @@
+
 [project]
 name = "prodml"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = [
     "scikit-learn",
-    "pandas",
-    "pyarrow",
     "fastapi[standard]",
     "uvicorn",
     "pydantic",
     "pydantic-settings",
-    "onnx>=1.22.0",
-    "skl2onnx>=1.20.0",
-    "onnxruntime>=1.24.3",
 ]
 
 [project.scripts]
@@ -23,7 +19,24 @@ prodml-predict = "prodml.predict:main"
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
+[tool.pytest.ini_options]
+addopts = "--cov=src/prodml --cov-fail-under=70"
+
+[tool.coverage.run]
+omit = [
+    "src/prodml/train.py",
+    "src/prodml/data.py",
+    "src/prodml/registry.py",
+]
+
 [dependency-groups]
+train = [
+    "pandas",
+    "pyarrow",
+    "onnx>=1.22.0",
+    "skl2onnx>=1.20.0",
+    "onnxruntime>=1.24.3",
+]
 dev = [
     "pytest",
     "pytest-cov",
@@ -34,16 +47,4 @@ dev = [
     "pre-commit",
     "matplotlib>=3.10.9",
     "seaborn>=0.13.2",
-]
-
-[tool.pytest.ini_options]
-addopts = "--cov=src/prodml --cov-fail-under=70"
-
-[tool.coverage.run]
-# Unit-test scope for MP1 = serving side. The training side (train/data/registry)
-# is exercised end-to-end by `uv run prodml-train` (Step 2 acceptance) instead.
-omit = [
-    "src/prodml/train.py",
-    "src/prodml/data.py",
-    "src/prodml/registry.py",
 ]

@@ -24,8 +24,18 @@ pickle vs ONNX — mean, p95 on 500 rows
 [INFO]: 20:09:53+0200 - benchmark_pk_onnx_latency - pickle  mean 0.036 ms | p95 0.041 ms
 [INFO]: 20:09:53+0200 - benchmark_pk_onnx_latency - onnx    mean 0.014 ms | p95 0.017 ms
 ```
-## 4. Image size *(Step 7)*
-single-stage vs multi-stage; .dockerignore on/off
 
-## 5. Maturity self-assessment *(Step 8)*
-Level: __ / Missing to reach next level: __
+## 4. Image size
+single-stage vs multi-stage
+
+I am using docker bake to target individual stages. If only a single stage exists it would be the builder, so the comparison is between builder and runtime stages
+
+```
+IMAGE                                               ID             DISK USAGE   CONTENT SIZE   EXTRA
+ghcr.io/badrmoh/mlops-practitioner/prodml:builder   2816d4cc2109        648MB          142MB        
+ghcr.io/badrmoh/mlops-practitioner/prodml:runtime   a5a745daad59        561MB          117MB   
+```
+
+
+## 5. Maturity self-assessment
+Level: 1
