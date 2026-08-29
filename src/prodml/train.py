@@ -49,7 +49,7 @@ class Trainer:
         """Save the trained model and vectorizer to disk. Separated to avoid overriding the model before validation."""
         if self._vec is None or self._model is None:
             raise RuntimeError("call train() before validate()")
-        with open(self.settings.model_path, "wb") as f_out:
+        with open(self.settings.pkl_model_path, "wb") as f_out:
             pickle.dump({"model": self._model, "vectorizer": self._vec}, f_out)
 
     def validate(self, metrics: list[str] | None = None) -> tuple[float, ...]:

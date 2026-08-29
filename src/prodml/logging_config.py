@@ -1,7 +1,31 @@
+import contextvars
 import datetime as dt
 import json
 import logging
 from typing import override
+
+_correlation_id: contextvars.ContextVar[str] = contextvars.ContextVar(
+    "correlation_id",
+    default="-",
+)
+
+
+def set_correlation_id(correlation_id: str) -> contextvars.Token[str]:
+    return _correlation_id.set(correlation_id)
+
+
+def reset_correlation_id(token: contextvars.Token[str]) -> None:
+    _correlation_id.reset(token)
+
+
+def get_correlation_id() -> str:
+    return _correlation_id.get()
+
+
+class CorrelationIdFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        record.correlation_id = get_correlation_id()
+        return True
 
 
 class DefaultFormatter(logging.Formatter):
@@ -108,6 +132,9 @@ def setup_logger(log_level: str = "info", log_format: str = "default") -> None:
     # TODO: Consider extending this to support file logging.
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
+
+    # Add CorrelationIdFilter to the handler
+    handler.addFilter(CorrelationIdFilter())
 
     root_logger.setLevel(LOG_LEVELS.get(log_level.lower(), logging.INFO))
     root_logger.addHandler(handler)

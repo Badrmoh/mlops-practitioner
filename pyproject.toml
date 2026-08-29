@@ -2,10 +2,18 @@
 name = "prodml"
 version = "0.1.0"
 requires-python = ">=3.10"
-dependencies = ["scikit-learn","pandas","pyarrow","fastapi","uvicorn","pydantic","pydantic-settings"]
-
-[project.optional-dependencies]
-dev = ["pytest","pytest-cov","ruff","black","mypy","httpx","pre-commit"]
+dependencies = [
+    "scikit-learn",
+    "pandas",
+    "pyarrow",
+    "fastapi[standard]",
+    "uvicorn",
+    "pydantic",
+    "pydantic-settings",
+    "onnx>=1.22.0",
+    "skl2onnx>=1.20.0",
+    "onnxruntime>=1.24.3",
+]
 
 [project.scripts]
 prodml-train = "prodml.train:main"
