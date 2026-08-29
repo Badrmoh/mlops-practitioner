@@ -9,7 +9,7 @@ This project serves as a notebook for all projects in the course
 0. Install dependencies
 
 ```
-uv sync --group dev
+uv sync --group dev --group train
 ```
 
 1. Configuration
@@ -43,7 +43,6 @@ uv run prodml-predict
 uv run tests test_serialization_latency.py
 ```
 
-
 5. Run Benchmarking
 
 Compare model performance between pickle and ONNX formats:
@@ -52,6 +51,24 @@ Compare model performance between pickle and ONNX formats:
 uv run optimizations/benchmark_pk_onnx.py
 ```
 
+6. Run FastAPI
+
+```
+uv run fastapi dev src/api/main.py
+```
+
+7. Run Tests
+
+```
+uv run pytest
+```
+
+8. Build and run Docker Image of the api
+
+```
+docker buildx bake -f docker/docker-bake.hcl runtime --push
+docker run --rm -p 8000:8000 -v $PWD/.env:/app/.env ghcr.io/badrmoh/mlops-practitioner/prodml:runtime
+```
 
 ---
 
