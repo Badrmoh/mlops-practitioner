@@ -1,0 +1,15 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+data/
+*.egg-info
+.coverage
+
+# Virtual environments
+.venv
+
+# Ignore user configs
+.env 
