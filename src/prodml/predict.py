@@ -9,7 +9,7 @@ from prodml.config import PredictSettings
 from prodml.logging_config import setup_logger
 
 settings = PredictSettings()
-#setup_logger(log_level=settings.log_level, log_format=settings.log_format)
+setup_logger(log_level=settings.log_level, log_format=settings.log_format)
 _log = logging.getLogger(__name__)
 
 
