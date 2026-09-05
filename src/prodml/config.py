@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Any
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -19,6 +20,7 @@ class TrainingSettings(BaseSettings):
     model_params: dict[str, Any] = {}
     log_level: str = "info"
     log_format: str = "default"
+    mlflow_tracking_uri: str = Field(validation_alias="MLFLOW_TRACKING_URI") 
 
 
 class PredictSettings(BaseSettings):
@@ -42,3 +44,4 @@ class BenchmarkSettings(BaseSettings):
     onnx_model_path: str = "models/prodml_model.onnx"
     log_level: str = "info"
     log_format: str = "default"
+

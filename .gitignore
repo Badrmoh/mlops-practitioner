@@ -12,4 +12,10 @@ data/
 .venv
 
 # Ignore user configs
-.env 
+.env
+
+# Terraform
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/.terraform
+infra/.terraform.lock.hcl

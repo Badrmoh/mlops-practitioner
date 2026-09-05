@@ -9,6 +9,9 @@ dependencies = [
     "uvicorn",
     "pydantic",
     "pydantic-settings",
+    "xgboost>=3.2.0",
+    #"torch>=2.13.0",
+    "mlflow>=3.15.2",
 ]
 
 [project.scripts]
@@ -36,6 +39,7 @@ train = [
     "onnx>=1.22.0",
     "skl2onnx>=1.20.0",
     "onnxruntime>=1.24.3",
+    "torchmetrics>=1.9.0",
 ]
 dev = [
     "pytest",
