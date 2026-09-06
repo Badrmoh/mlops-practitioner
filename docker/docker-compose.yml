@@ -38,9 +38,10 @@ services:
       RUSTFS_REGION: us-east-1
       RUSTFS_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
       RUSTFS_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
-      RUSTFS_CONSOLE_ENABLE: false
+      RUSTFS_CONSOLE_ENABLE: true
     ports:
       - "9000:9000"
+      - "9001:9001"
     volumes:
       - rustfs-data:/data
     restart: unless-stopped
