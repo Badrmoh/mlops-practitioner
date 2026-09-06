@@ -3,10 +3,11 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import logging
-import mlflow, mlflow.sklearn
+import mlflow
 import pickle
 from typing import Any, Protocol
 from pathlib import Path
+import yaml
 
 from sklearn.feature_extraction import DictVectorizer
 
@@ -15,6 +16,10 @@ from prodml.data import clean_data, load_training_data, load_validation_data
 from prodml.features import compose_features
 from prodml.logging_config import setup_logger
 from prodml.factories import METRICS, MODEL_FACTORIES
+
+settings = TrainingSettings()  # Add this line to initialize settings
+setup_logger(log_level=settings.log_level, log_format=settings.log_format)
+_log = logging.getLogger(__name__)
 
 def git_commit() -> str:
     return subprocess.run(["git", "rev-parse", "--short", "HEAD"],
@@ -30,6 +35,15 @@ def file_md5(path: str) -> str:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
+
+def data_version_hash(data_path: str) -> str:
+    """DVC content hash of the tracked data file, read from its .dvc pointer."""
+    dvc_file = Path(data_path).with_suffix(Path(data_path).suffix + ".dvc")
+    if not dvc_file.exists():
+        _log.warning(f"no .dvc pointer for {data_path} — falling back to file md5")
+        return file_md5(data_path)
+    with open(dvc_file) as f:
+        return yaml.safe_load(f)["outs"][0]["md5"]
 
 def log_figures(trainer, model_name: str) -> None:
     """Residual plot (all) + feature importance (linear/xgboost) — 2.3."""
@@ -140,9 +154,6 @@ class Trainer:
 
 def main() -> None:
     matplotlib.use("Agg")
-    settings = TrainingSettings()
-    setup_logger(log_level=settings.log_level, log_format=settings.log_format)
-    _log = logging.getLogger(__name__)
     
     mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
     mlflow.set_experiment("Ride Duration Model")

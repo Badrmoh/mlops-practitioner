@@ -12,6 +12,7 @@ dependencies = [
     "xgboost>=3.2.0",
     #"torch>=2.13.0",
     "mlflow>=3.15.2",
+    "pyyaml>=6.0.3",
 ]
 
 [project.scripts]
