@@ -4,7 +4,7 @@ __pycache__/
 build/
 dist/
 wheels/
-data/*/*paraquet
+data/**/*.parquet
 *.egg-info
 .coverage
 
@@ -21,5 +21,3 @@ infra/terraform.tfstate.backup
 infra/.terraform
 infra/.terraform.lock.hcl
 
-.dvc/config
-data/raw/green_tripdata_2024-12.parquet
