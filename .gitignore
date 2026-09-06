@@ -7,7 +7,7 @@ wheels/
 #data/
 *.egg-info
 .coverage
-.dvc/
+
 
 # Virtual environments
 .venv
@@ -21,3 +21,4 @@ infra/terraform.tfstate.backup
 infra/.terraform
 infra/.terraform.lock.hcl
 
+.dvc/config
