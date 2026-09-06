@@ -78,13 +78,13 @@ stages:
           model: xgboost
           model_params:
             n_estimators: 200
-            max_depth: 8
+            max_depth: 6
             learning_rate: 0.2
     outs:
     - path: ../models/model.pkl
       hash: md5
-      md5: 098b2cd47d55b3a9fa03e40a7387ccae
-      size: 586263
+      md5: e2be89c8b0e5e57871e646bc262567d2
+      size: 459225
   evaluate:
     cmd: python stages/evaluate.py
     deps:
@@ -94,8 +94,8 @@ stages:
       size: 547821
     - path: ../models/model.pkl
       hash: md5
-      md5: 098b2cd47d55b3a9fa03e40a7387ccae
-      size: 586263
+      md5: e2be89c8b0e5e57871e646bc262567d2
+      size: 459225
     - path: stages/evaluate.py
       hash: md5
       md5: 9b76b1b334aad1c0e2f5841454a0ad6f
@@ -110,5 +110,5 @@ stages:
     outs:
     - path: ../metrics.json
       hash: md5
-      md5: cb9561c38684bee44b643e42bd9252f5
-      size: 88
+      md5: c20bb330400048195b9554f8c0cf7c2a
+      size: 87
