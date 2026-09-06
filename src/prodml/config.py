@@ -32,6 +32,9 @@ class PredictSettings(BaseSettings):
     pkl_model_path: str = "models/model.pkl"
     log_level: str = "info"
     log_format: str = "default"
+    model_source: str = "file"
+    registry_model_name: str = "ride-duration-predictor"
+    registry_stage: str = "Production"
 
 
 class BenchmarkSettings(BaseSettings):

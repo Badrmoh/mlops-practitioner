@@ -14,7 +14,7 @@ from prodml.config import TrainingSettings
 from prodml.data import clean_data, load_training_data, load_validation_data
 from prodml.features import compose_features
 from prodml.logging_config import setup_logger
-from prodml.registry import METRICS, MODEL_FACTORIES
+from prodml.factories import METRICS, MODEL_FACTORIES
 
 def git_commit() -> str:
     return subprocess.run(["git", "rev-parse", "--short", "HEAD"],
