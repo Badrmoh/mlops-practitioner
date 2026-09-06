@@ -1,0 +1,114 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python stages/prepare.py
+    deps:
+    - path: ../data/raw/green_tripdata_2024-11.parquet
+      hash: md5
+      md5: 6e3195fcff081dbdb5b8774166ca1b3d
+      size: 981269
+    - path: ../data/raw/green_tripdata_2024-12.parquet
+      hash: md5
+      md5: 245d928d6543a3d83109297fdef92fa3
+      size: 1014705
+    - path: stages/prepare.py
+      hash: md5
+      md5: c649441187b87c1e1c2e5251ed8d15c6
+      size: 581
+    params:
+      params.yaml:
+        prepare:
+          months:
+          - 2024-11
+          - 2024-12
+    outs:
+    - path: ../data/prepared/green_tripdata_2024-11.parquet
+      hash: md5
+      md5: aa8e1826f546bca03bbb65ae92d4aaac
+      size: 2258628
+    - path: ../data/prepared/green_tripdata_2024-12.parquet
+      hash: md5
+      md5: abda5f86271ec2c64bb5d084733b6f6c
+      size: 2303283
+  featurize:
+    cmd: python stages/featurize.py
+    deps:
+    - path: ../data/prepared/green_tripdata_2024-11.parquet
+      hash: md5
+      md5: aa8e1826f546bca03bbb65ae92d4aaac
+      size: 2258628
+    - path: ../data/prepared/green_tripdata_2024-12.parquet
+      hash: md5
+      md5: abda5f86271ec2c64bb5d084733b6f6c
+      size: 2303283
+    - path: stages/featurize.py
+      hash: md5
+      md5: 26066bdfa38fe537d7be42f9494924fd
+      size: 658
+    params:
+      params.yaml:
+        featurize:
+          columns:
+          - Trip_Distance
+          - PU_DO
+          - Trip_Duration
+    outs:
+    - path: ../data/features/green_tripdata_2024-11.parquet
+      hash: md5
+      md5: fa6411e55b5dfdca48766de677462525
+      size: 538663
+    - path: ../data/features/green_tripdata_2024-12.parquet
+      hash: md5
+      md5: 38ac3b3d0cff33438bbb969abbe7f4d9
+      size: 547821
+  train:
+    cmd: python stages/train.py
+    deps:
+    - path: ../data/features/green_tripdata_2024-11.parquet
+      hash: md5
+      md5: fa6411e55b5dfdca48766de677462525
+      size: 538663
+    - path: stages/train.py
+      hash: md5
+      md5: 03b6d81b406649e6dd365bf38ba78c7a
+      size: 928
+    params:
+      params.yaml:
+        train:
+          model: xgboost
+          model_params:
+            n_estimators: 200
+            max_depth: 8
+            learning_rate: 0.2
+    outs:
+    - path: ../models/model.pkl
+      hash: md5
+      md5: 098b2cd47d55b3a9fa03e40a7387ccae
+      size: 586263
+  evaluate:
+    cmd: python stages/evaluate.py
+    deps:
+    - path: ../data/features/green_tripdata_2024-12.parquet
+      hash: md5
+      md5: 38ac3b3d0cff33438bbb969abbe7f4d9
+      size: 547821
+    - path: ../models/model.pkl
+      hash: md5
+      md5: 098b2cd47d55b3a9fa03e40a7387ccae
+      size: 586263
+    - path: stages/evaluate.py
+      hash: md5
+      md5: 9b76b1b334aad1c0e2f5841454a0ad6f
+      size: 1264
+    params:
+      params.yaml:
+        evaluate:
+          metrics:
+          - rmse
+          - mae
+          - r2
+    outs:
+    - path: ../metrics.json
+      hash: md5
+      md5: cb9561c38684bee44b643e42bd9252f5
+      size: 88

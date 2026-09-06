@@ -1,0 +1,46 @@
+stages:
+  prepare:
+    cmd: python stages/prepare.py
+    params:
+      - params.yaml:
+          - prepare
+    deps:
+      - ../data/raw/green_tripdata_2024-11.parquet
+      - ../data/raw/green_tripdata_2024-12.parquet
+      - stages/prepare.py
+    outs:
+      - ../data/prepared/green_tripdata_2024-11.parquet
+      - ../data/prepared/green_tripdata_2024-12.parquet
+  featurize:
+    cmd: python stages/featurize.py
+    params:
+      - params.yaml:
+          - featurize
+    deps:
+      - ../data/prepared/green_tripdata_2024-11.parquet
+      - ../data/prepared/green_tripdata_2024-12.parquet
+      - stages/featurize.py
+    outs:
+      - ../data/features/green_tripdata_2024-11.parquet
+      - ../data/features/green_tripdata_2024-12.parquet
+  train:
+    cmd: python stages/train.py
+    params:
+      - params.yaml:
+          - train
+    deps:
+      - ../data/features/green_tripdata_2024-11.parquet
+      - stages/train.py
+    outs:
+      - ../models/model.pkl
+  evaluate:
+    cmd: python stages/evaluate.py
+    params:
+      - params.yaml:
+          - evaluate
+    deps:
+      - ../data/features/green_tripdata_2024-12.parquet
+      - ../models/model.pkl
+      - stages/evaluate.py
+    metrics:
+      - ../metrics.json

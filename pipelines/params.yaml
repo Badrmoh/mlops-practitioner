@@ -1,0 +1,12 @@
+prepare:
+  months: ["2024-11", "2024-12"]
+featurize:
+  columns: ["Trip_Distance", "PU_DO", "Trip_Duration"]
+train:
+  model: xgboost
+  model_params:
+    n_estimators: 200
+    max_depth: 8
+    learning_rate: 0.2
+evaluate:
+  metrics: ["rmse", "mae", "r2"]
