@@ -7,7 +7,7 @@ wheels/
 #data/
 *.egg-info
 .coverage
-.dvc
+.dvc/
 
 # Virtual environments
 .venv
